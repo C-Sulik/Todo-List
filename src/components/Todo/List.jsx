@@ -3,7 +3,7 @@ import { ToDoItem } from "./Item";
 import { Filter } from "./Filter";
 import styles from "./styles.module.css";
 
-export function ToDoList({ todos, setTodos }) {
+export function ToDoList({ todos, setTodos, listId}) {
   const [selectedTodos, setSelectedTodos] = useState([]);
   const [search, setSearch] = useState("");
   const [completedFilter, setCompletedFilter] = useState(null);
@@ -70,6 +70,7 @@ export function ToDoList({ todos, setTodos }) {
   return (
     <div className={styles.wrapper}>
       <Filter
+        listId={listId}
         completedFilter={completedFilter}
         setCompletedFilter={setCompletedFilter}
       />

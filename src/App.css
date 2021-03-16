@@ -27,7 +27,7 @@ button {
 }
 
 input[type="checkbox"] {
-  border-size: 0;
+  border: 0;
 }
 
 button:hover,
