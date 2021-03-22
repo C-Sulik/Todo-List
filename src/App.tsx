@@ -33,7 +33,8 @@ export default function App() {
     setTodoLists([...todoLists, {
       id: Date.now(),
       name: 'Todo List',
-      values: []}])
+      values: []}
+    ])
   }
 
   const handleDeleteList = (listId) => {
