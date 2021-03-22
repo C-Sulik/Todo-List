@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToDo } from "./components/Todo";
+import { TodoList } from "./components/Todo";
 import "./App.css";
 import { useState } from "react";
 
@@ -26,6 +26,7 @@ export default function App() {
       }
     ],
   }
+
   const [todoLists, setTodoLists] = useState([todosMock])
 
   const addList = () => {
@@ -35,11 +36,23 @@ export default function App() {
       values: []}])
   }
 
+  const handleDeleteList = (listId) => {
+    setTodoLists(todoLists.filter(({id}) => id !== listId));
+  }
 
+  const handleEditListTitle = (newName, id) => {
+    setTodoLists(todoLists.map((list) => {
+      if (id === list.id) {
+        list.name = newName;
+      }
+      return list;
+    }))
+  };
+  
   return (
     <div className="App">
       <button type="button" onClick={addList}>Add List</button>
-      {todoLists.map(({id, name, values}) => <ToDo list={values} listTitle={name} listId={id} key={id} />)}
+      {todoLists.map(({id, name, values}) => <TodoList onDelete={handleDeleteList} onTitleEdit={handleEditListTitle} list={values} listTitle={name} listId={id} key={id} />)}
     </div>
   );
 }
