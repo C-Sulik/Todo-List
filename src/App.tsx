@@ -52,8 +52,10 @@ export default function App() {
   
   return (
     <div className="App">
-      <button type="button" onClick={addList}>Add List</button>
-      {todoLists.map(({id, name, values}) => <TodoList onDelete={handleDeleteList} onTitleEdit={handleEditListTitle} list={values} listTitle={name} listId={id} key={id} />)}
+      <button className="add-list-btn" type="button" onClick={addList}>Add List</button>
+      <div className="lists-wrapper">
+        {todoLists.map(({id, name, values}) => <TodoList onDelete={handleDeleteList} onTitleEdit={handleEditListTitle} list={values} listTitle={name} listId={id} key={id} />)}
+      </div>
     </div>
   );
 }

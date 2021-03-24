@@ -2,8 +2,22 @@
   font-family: Roboto Condensed;
   font-size: 16px;
   text-align: center;
-  width: 778px;
   margin: 0 auto;
+  display: flex;
+  max-width: 1320px;
+}
+
+.add-list-btn{
+  max-width: 63px;
+  max-height: 250px;
+  min-width: 63px;
+  min-height: 250px;
+}
+
+.lists-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 * {

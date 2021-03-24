@@ -6,12 +6,62 @@
   align-items: center;
 }
 
+.todo-list {
+  min-width: 353px;
+  margin: 20px;
+}
+
+.list-title {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+
+.edit-title-form {
+  display: flex;
+  align-items: center;
+  min-height: 34px;
+  width: 311px;
+  word-break: break-word;
+}
+
+.edit-title-btn {
+  width: 34px;
+  height: 34px;
+}
+
+.title-input {
+  font-family: Roboto Condensed;
+  font-size: 24px;
+  font-weight: bold;
+  height: 28px;
+  max-width: 269px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.edit-title-btn{
+  width: 34px;
+  height: 34px;
+  margin-left: 3px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.delete-list-btn {
+  width: 50px;
+  margin-left: 88%;
+  border: none;
+  width: 34px; 
+}
+
+
 .todo {
   cursor: pointer;
   display: flex;
   align-items: center;
   min-height: 60px;
-  min-width: 300px;
+  min-width: 303px;
   border: 1px solid gray;
   border-radius: 5px;
   padding: 5px 25px;
@@ -23,11 +73,6 @@
     -4px -4px 12px 0 rgba(255, 255, 255, 0.3);
 }
 
-/* .todo:hover .del-btn {
-  opacity: 1;
-  pointer-events: all;
-} */
-
 .del-btn {
   margin-left: 5px;
   width: 25px;
@@ -36,19 +81,15 @@
 }
 
 .delete-todos-btn {
-  position: absolute;
-  left: 568px;
-  top: -34px;
-  width: 52px;
+  margin-left: 3px;
+  width: 85px;
   height: 34px;
   border-radius: 3px;
 }
 
 .completed-todos-btn {
-  position: absolute;
-  left: 132px;
-  top: -34px;
-  width: 77px;
+  margin-right: 3px;
+  width: 85px;
   height: 34px;
   border-radius: 3px;
 }
@@ -61,12 +102,15 @@
 }
 
 .todo-text {
+  display: block;
   margin: 20px;
+  word-break: break-word;
+  text-align: left;
 }
 
 .todo-checkbox {
-  width: 25px;
-  height: 25px;
+  min-width: 25px;
+  min-height: 25px;
 }
 
 .add-form {
@@ -133,6 +177,7 @@
 
 .search-todo {
   margin-top: 10px;
+  height: 34px;
 }
 
 .label-filter {
@@ -170,4 +215,13 @@
 /* ::last-letter */
 .cockerel::first-letter {
   transform: rotateY(180deg);
+}
+
+.cockerel {
+  display: inline-block;
+  min-height: 34px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 311px;
+  word-break: break-word;
 }

@@ -31,17 +31,19 @@ export const TodoList = ({ list, listTitle, listId, onTitleEdit, onDelete}) => {
   };
 
   return (
-    <div>
-      <h2 className={styles.cockerel}> {listTitle} </h2>
-      <button type="button" onClick={() => onDelete(listId)}>Delete List</button>
-      <button type="button" onClick={showEditForm}>🐓</button>
+    <div className={styles["todo-list"]}>
+      <button className={styles["delete-list-btn"]} type="button" onClick={() => onDelete(listId)}>X</button>
+      <div className={styles["list-title"]}>
+      {!editListTitle && (<h2 className={styles.cockerel}> {listTitle} </h2>)}
+      {editListTitle && (<form className={styles["edit-title-form"]} onSubmit={editTitleName}>
+        <input type="text" className={styles['title-input']} value={titleName} onChange={(event) => setTitleName(event.target.value)}/>
+        <button type="submit" className={styles['edit-title-btn']}>S</button>
+      </form>)}
+        <button className={styles["edit-title-btn"]} type="button" onClick={showEditForm}>🐓</button>
+      </div>
       <AddToDo setTodos={setTodos} onAdd={handleAddToDo} />
       <ToDoList todos={todos} setTodos={setTodos} listId={listId}/>
 
-      {editListTitle && (<form onSubmit={editTitleName}>
-        <input type="text" value={titleName} onChange={(event) => setTitleName(event.target.value)}/>
-        <button type="submit">S</button>
-      </form>)}
     </div>
   );
 };
