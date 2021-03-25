@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 
-export function Filter({ completedFilter, setCompletedFilter, listId}) {
+export function Filter({ completedFilter, setCompletedFilter, listId }) {
   const toggleCompletedFilter = (value) => {
     setCompletedFilter(value);
   };

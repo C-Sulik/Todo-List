@@ -14,7 +14,7 @@
 .list-title {
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
 }
 
 .edit-title-form {
@@ -40,7 +40,7 @@
   padding: 0px;
 }
 
-.edit-title-btn{
+.edit-title-btn {
   width: 34px;
   height: 34px;
   margin-left: 3px;
@@ -52,9 +52,8 @@
   width: 50px;
   margin-left: 88%;
   border: none;
-  width: 34px; 
+  width: 34px;
 }
-
 
 .todo {
   cursor: pointer;

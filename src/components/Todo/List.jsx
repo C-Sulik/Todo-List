@@ -3,7 +3,7 @@ import { ToDoItem } from "./Item";
 import { Filter } from "./Filter";
 import styles from "./styles.module.css";
 
-export function ToDoList({ todos, setTodos, listId}) {
+export function ToDoList({ todos, setTodos, listId }) {
   const [selectedTodos, setSelectedTodos] = useState([]);
   const [search, setSearch] = useState("");
   const [completedFilter, setCompletedFilter] = useState(null);
@@ -75,25 +75,29 @@ export function ToDoList({ todos, setTodos, listId}) {
         setCompletedFilter={setCompletedFilter}
       />
       <div>
-      {selectedTodos.length > 0 && (<button
-          className={styles["completed-todos-btn"]}
-          type="button"
-          onClick={handleCompletedTodos}
-        >
-          {`Complete ${selectedTodos.length}`}
-        </button>)}
+        {selectedTodos.length > 0 && (
+          <button
+            className={styles["completed-todos-btn"]}
+            type="button"
+            onClick={handleCompletedTodos}
+          >
+            {`Complete ${selectedTodos.length}`}
+          </button>
+        )}
         <input
           type="search"
           onChange={onSearch}
           className={styles["search-todo"]}
         />
-        {selectedTodos.length > 0 && (<button
-          className={styles["delete-todos-btn"]}
-          type="button"
-          onClick={handleDeleteTodos}
-        >
-          {`Delete ${selectedTodos.length}`}
-        </button>)}
+        {selectedTodos.length > 0 && (
+          <button
+            className={styles["delete-todos-btn"]}
+            type="button"
+            onClick={handleDeleteTodos}
+          >
+            {`Delete ${selectedTodos.length}`}
+          </button>
+        )}
       </div>
       <ul>
         {filterTodo(todos).map((todo) => (
