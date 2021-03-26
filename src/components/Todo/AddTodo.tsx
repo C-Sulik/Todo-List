@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 
-export function AddToDo({ onAdd }) {
+interface AddTodoPropsI {
+  onAdd: (title: string) => void;
+}
+export const AddToDo: React.FC<AddTodoPropsI> = ({ onAdd }) => {
   const [title, setTitle] = useState("");
 
-  const handleAddTodo = (event) => {
+  const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (title.trim()) onAdd(title);
     setTitle("");
@@ -25,4 +28,4 @@ export function AddToDo({ onAdd }) {
       </button>
     </form>
   );
-}
+};

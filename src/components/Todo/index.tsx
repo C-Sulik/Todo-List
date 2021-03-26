@@ -2,8 +2,17 @@ import React, { useState } from "react";
 import { ToDoList } from "./List";
 import { AddToDo } from "./AddTodo";
 import styles from "./styles.module.css";
+import { TodoI } from "../../types";
 
-export const TodoList = ({
+interface TodoListPropsI {
+  list: TodoI[];
+  listTitle: string;
+  listId: number;
+  onTitleEdit: (newName: string, id: number) => void;
+  onDelete: (listId: number) => void;
+}
+
+export const TodoList: React.FC<TodoListPropsI> = ({
   list,
   listTitle,
   listId,
@@ -16,7 +25,7 @@ export const TodoList = ({
 
   const showEditForm = () => setEditListTitle(true);
 
-  const editTitleName = (event) => {
+  const editTitleName = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (titleName.trim()) {
       onTitleEdit(titleName, listId);
@@ -24,7 +33,7 @@ export const TodoList = ({
     setEditListTitle(false);
   };
 
-  const handleAddToDo = (title) => {
+  const handleAddToDo = (title: string) => {
     setTodos([
       {
         title,
@@ -67,7 +76,7 @@ export const TodoList = ({
           🐓
         </button>
       </div>
-      <AddToDo setTodos={setTodos} onAdd={handleAddToDo} />
+      <AddToDo onAdd={handleAddToDo} />
       <ToDoList todos={todos} setTodos={setTodos} listId={listId} />
     </div>
   );
