@@ -1,14 +1,30 @@
 import React from "react";
 import { Title } from "./Title";
-
 import styles from "./styles.module.css";
+import { TodoI } from "../../types";
 
-export function ToDoItem({ todo, onEdit, onDelete, onSelect, className }) {
+interface TodoItemPropsI {
+  todo: TodoI;
+  className: string;
+  onEdit: (id: number, payload: Partial<TodoI>) => void;
+  onDelete: (id: number) => void;
+  onSelect: (id: number) => void;
+}
+
+export const TodoItem: React.FC<TodoItemPropsI> = ({
+  todo,
+  onEdit,
+  onDelete,
+  onSelect,
+  className,
+}) => {
   const toggleTodoCompleted = () => {
     onEdit(todo.id, { completed: !todo.completed });
   };
 
-  const handleSelectTodo = (event) => {
+  const handleSelectTodo = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     if (event.target === event.currentTarget) {
       onSelect(todo.id);
     }
@@ -36,4 +52,4 @@ export function ToDoItem({ todo, onEdit, onDelete, onSelect, className }) {
       </button>
     </div>
   );
-}
+};

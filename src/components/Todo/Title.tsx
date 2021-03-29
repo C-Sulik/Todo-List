@@ -1,18 +1,37 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./styles.module.css";
+import { TodoI } from "../../types";
 
-const TitleEditor = ({ todo, isEdit, onEdit, setIsEdit }) => {
+interface TitleEditorPropsI {
+  todo: TodoI;
+  isEdit: boolean;
+  onEdit: (id: number, payload: Partial<TodoI>) => void;
+  setIsEdit: (value: React.SetStateAction<boolean>) => void;
+}
+
+interface TitlePropsI {
+  todo: TodoI;
+  onEdit: (id: number, payload: Partial<TodoI>) => void;
+}
+
+const TitleEditor: React.FC<TitleEditorPropsI> = ({
+  todo,
+  isEdit,
+  onEdit,
+  setIsEdit,
+}) => {
   const [newTitle, setNewTitle] = useState(todo.title);
-  const titleEditInputRef = useRef(null);
+  const titleEditInputRef = useRef<HTMLInputElement>(null);
 
-  const submitNewTitle = (event) => {
+  const submitNewTitle = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (newTitle.trim()) onEdit(todo.id, { title: newTitle });
     setIsEdit(false);
   };
 
   useEffect(() => {
-    if (isEdit && titleEditInputRef) titleEditInputRef.current.focus();
+    // https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+    if (isEdit && titleEditInputRef?.current) titleEditInputRef.current.focus();
   }, [isEdit]);
 
   return (
@@ -31,7 +50,7 @@ const TitleEditor = ({ todo, isEdit, onEdit, setIsEdit }) => {
   );
 };
 
-export const Title = ({ onEdit, todo }) => {
+export const Title: React.FC<TitlePropsI> = ({ onEdit, todo }) => {
   const [isEdit, setIsEdit] = useState(false);
 
   return isEdit ? (

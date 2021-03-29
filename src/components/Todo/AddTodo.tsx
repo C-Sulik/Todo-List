@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 interface AddTodoPropsI {
   onAdd: (title: string) => void;
 }
-export const AddToDo: React.FC<AddTodoPropsI> = ({ onAdd }) => {
+export const AddTodo: React.FC<AddTodoPropsI> = ({ onAdd }) => {
   const [title, setTitle] = useState("");
 
   const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {

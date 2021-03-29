@@ -1,5 +1,5 @@
 import React from "react";
-import { TodoList } from "./components/Todo";
+import { TodoListContainer } from "./components/Todo";
 import "./App.css";
 import { useState } from "react";
 import { TodoListI } from "./types";
@@ -59,7 +59,7 @@ export default function App() {
       </button>
       <div className="lists-wrapper">
         {todoLists.map(({ id, title, items }) => (
-          <TodoList
+          <TodoListContainer
             onDelete={handleDeleteList}
             onTitleEdit={handleEditListTitle}
             list={items}

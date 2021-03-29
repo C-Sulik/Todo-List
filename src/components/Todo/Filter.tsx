@@ -1,8 +1,17 @@
 import React from "react";
 import styles from "./styles.module.css";
+import { CompletedFilterState } from "./List";
 
-export function Filter({ completedFilter, setCompletedFilter, listId }) {
-  const toggleCompletedFilter = (value) => {
+interface FilterPropsI {
+  listId: number;
+  setCompletedFilter: (value: CompletedFilterState) => void;
+}
+
+export const Filter: React.FC<FilterPropsI> = ({
+  listId,
+  setCompletedFilter,
+}) => {
+  const toggleCompletedFilter = (value: CompletedFilterState) => {
     setCompletedFilter(value);
   };
 
@@ -13,9 +22,9 @@ export function Filter({ completedFilter, setCompletedFilter, listId }) {
         className={styles["radio-button"]}
         type="radio"
         name={`${listId}-completedFilter`}
-        onChange={(event) => toggleCompletedFilter(null)}
+        onChange={(event) => toggleCompletedFilter("all")}
         defaultChecked={true}
-        value={completedFilter === null}
+        value="all"
       />
       <label htmlFor={`${listId}-radioBtn1`} className={styles["label-filter"]}>
         All
@@ -25,8 +34,8 @@ export function Filter({ completedFilter, setCompletedFilter, listId }) {
         className={styles["radio-button"]}
         type="radio"
         name={`${listId}-completedFilter`}
-        onChange={(event) => toggleCompletedFilter(true)}
-        value={completedFilter === true}
+        onChange={(event) => toggleCompletedFilter("completed")}
+        value="completed"
       />
       <label htmlFor={`${listId}-radioBtn2`} className={styles["label-filter"]}>
         Completeted
@@ -36,12 +45,12 @@ export function Filter({ completedFilter, setCompletedFilter, listId }) {
         className={styles["radio-button"]}
         type="radio"
         name={`${listId}-completedFilter`}
-        onChange={(event) => toggleCompletedFilter(false)}
-        value={completedFilter === false}
+        onChange={(event) => toggleCompletedFilter("not completed")}
+        value="not completed"
       />
       <label htmlFor={`${listId}-radioBtn3`} className={styles["label-filter"]}>
         Not Completed
       </label>
     </div>
   );
-}
+};

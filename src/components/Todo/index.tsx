@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { ToDoList } from "./List";
-import { AddToDo } from "./AddTodo";
+import { TodoList } from "./List";
+import { AddTodo } from "./AddTodo";
 import styles from "./styles.module.css";
 import { TodoI } from "../../types";
 
-interface TodoListPropsI {
+interface TodoListContainerI {
   list: TodoI[];
   listTitle: string;
   listId: number;
@@ -12,7 +12,7 @@ interface TodoListPropsI {
   onDelete: (listId: number) => void;
 }
 
-export const TodoList: React.FC<TodoListPropsI> = ({
+export const TodoListContainer: React.FC<TodoListContainerI> = ({
   list,
   listTitle,
   listId,
@@ -76,8 +76,8 @@ export const TodoList: React.FC<TodoListPropsI> = ({
           🐓
         </button>
       </div>
-      <AddToDo onAdd={handleAddToDo} />
-      <ToDoList todos={todos} setTodos={setTodos} listId={listId} />
+      <AddTodo onAdd={handleAddToDo} />
+      <TodoList todos={todos} setTodos={setTodos} listId={listId} />
     </div>
   );
 };

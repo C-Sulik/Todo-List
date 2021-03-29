@@ -1,14 +1,25 @@
 import React, { useState } from "react";
-import { ToDoItem } from "./Item";
+import { TodoItem } from "./Item";
 import { Filter } from "./Filter";
 import styles from "./styles.module.css";
+import { TodoI } from "../../types";
 
-export function ToDoList({ todos, setTodos, listId }) {
-  const [selectedTodos, setSelectedTodos] = useState([]);
-  const [search, setSearch] = useState("");
-  const [completedFilter, setCompletedFilter] = useState(null);
+interface TodoListI {
+  todos: TodoI[];
+  setTodos: (todos: TodoI[]) => void;
+  listId: number;
+}
 
-  const handleDeleteTodo = (id) => {
+export type CompletedFilterState = "all" | "completed" | "not completed";
+
+export const TodoList: React.FC<TodoListI> = ({ todos, setTodos, listId }) => {
+  const [selectedTodos, setSelectedTodos] = useState<number[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [completedFilter, setCompletedFilter] = useState<CompletedFilterState>(
+    "all"
+  );
+
+  const handleDeleteTodo = (id: number) => {
     setTodos(todos.filter((todo) => todo.id !== id));
     setSelectedTodos(selectedTodos.filter((todoId) => todoId !== id));
   };
@@ -27,7 +38,7 @@ export function ToDoList({ todos, setTodos, listId }) {
     setSelectedTodos([]);
   };
 
-  const selectTodo = (id) => {
+  const selectTodo = (id: number) => {
     if (selectedTodos.includes(id)) {
       setSelectedTodos(selectedTodos.filter((elem) => elem !== id));
     } else {
@@ -35,32 +46,32 @@ export function ToDoList({ todos, setTodos, listId }) {
     }
   };
 
-  const selectTodoClassName = (id) => {
+  const selectTodoClassName = (id: number): string => {
     let className = `${styles.todo}`;
     if (selectedTodos.includes(id))
       className = `${styles.todo} ${styles["selected-todo"]}`;
     return className;
   };
 
-  const handleEditTodo = (id, payload) => {
+  const handleEditTodo = (id: number, payload: Partial<TodoI>) => {
     setTodos(
       todos.map((todo) => (id === todo.id ? { ...todo, ...payload } : todo))
     );
   };
 
-  const onSearch = (event) => {
+  const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
-  const filterTodo = (todos) => {
+  const filterTodo = (todos: TodoI[]) => {
     switch (true) {
       case Boolean(search):
         return todos.filter(({ title }) =>
           title.toLowerCase().includes(search)
         );
-      case completedFilter === false:
+      case completedFilter === "not completed":
         return todos.filter(({ completed }) => !completed);
-      case completedFilter === true:
+      case completedFilter === "completed":
         return todos.filter(({ completed }) => completed);
       default:
         return todos;
@@ -69,11 +80,7 @@ export function ToDoList({ todos, setTodos, listId }) {
 
   return (
     <div className={styles.wrapper}>
-      <Filter
-        listId={listId}
-        completedFilter={completedFilter}
-        setCompletedFilter={setCompletedFilter}
-      />
+      <Filter listId={listId} setCompletedFilter={setCompletedFilter} />
       <div>
         {selectedTodos.length > 0 && (
           <button
@@ -101,7 +108,7 @@ export function ToDoList({ todos, setTodos, listId }) {
       </div>
       <ul>
         {filterTodo(todos).map((todo) => (
-          <ToDoItem
+          <TodoItem
             key={todo.id}
             todo={todo}
             className={selectTodoClassName(todo.id)}
@@ -113,4 +120,4 @@ export function ToDoList({ todos, setTodos, listId }) {
       </ul>
     </div>
   );
-}
+};
