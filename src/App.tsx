@@ -1,8 +1,14 @@
 import React from "react";
 import { TodoListContainer } from "./components/Todo";
-import "./App.css";
 import { useState } from "react";
 import { TodoListI } from "./types";
+import {
+  GlobalStyle,
+  MainWrapper,
+  StyledFooterWrapper,
+  AddListButton,
+  ListsWrapper,
+} from "./styled";
 
 const todosMock: TodoListI = {
   id: 1,
@@ -53,22 +59,27 @@ export default function App() {
   };
 
   return (
-    <div className="App">
-      <button className="add-list-btn" type="button" onClick={addList}>
-        Add List
-      </button>
-      <div className="lists-wrapper">
-        {todoLists.map(({ id, title, items }) => (
-          <TodoListContainer
-            onDelete={handleDeleteList}
-            onTitleEdit={handleEditListTitle}
-            list={items}
-            listTitle={title}
-            listId={id}
-            key={id}
-          />
-        ))}
-      </div>
-    </div>
+    <>
+      <GlobalStyle />
+      <MainWrapper>
+        <StyledFooterWrapper color="pink">
+          <AddListButton type="button" onClick={addList}>
+            Add List
+          </AddListButton>
+        </StyledFooterWrapper>
+        <ListsWrapper>
+          {todoLists.map(({ id, title, items }) => (
+            <TodoListContainer
+              onDelete={handleDeleteList}
+              onTitleEdit={handleEditListTitle}
+              list={items}
+              listTitle={title}
+              listId={id}
+              key={id}
+            />
+          ))}
+        </ListsWrapper>
+      </MainWrapper>
+    </>
   );
 }

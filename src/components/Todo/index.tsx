@@ -3,6 +3,16 @@ import { TodoList } from "./List";
 import { AddTodo } from "./AddTodo";
 import styles from "./styles.module.css";
 import { TodoI } from "../../types";
+import styled from "styled-components";
+
+const Сockerel = styled.h2`
+  display: inline-block;
+  min-height: 34px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 311px;
+  word-break: break-word;
+`;
 
 interface TodoListContainerI {
   list: TodoI[];
@@ -54,7 +64,7 @@ export const TodoListContainer: React.FC<TodoListContainerI> = ({
         X
       </button>
       <div className={styles["list-title"]}>
-        {!editListTitle && <h2 className={styles.cockerel}> {listTitle} </h2>}
+        {!editListTitle && <Сockerel> {listTitle} </Сockerel>}
         {editListTitle && (
           <form className={styles["edit-title-form"]} onSubmit={editTitleName}>
             <input
