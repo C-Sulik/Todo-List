@@ -4,23 +4,29 @@ import { Filter } from "./Filter";
 import styles from "./styles.module.css";
 import { TodoI } from "../../types";
 
-interface TodoListI {
+interface TodoListPropsI {
   todos: TodoI[];
   setTodos: (todos: TodoI[]) => void;
   listId: number;
+  deleteTodo: (id: number, listId: number) => void;
 }
 
 export type CompletedFilterState = "all" | "completed" | "not completed";
 
-export const TodoList: React.FC<TodoListI> = ({ todos, setTodos, listId }) => {
+export const TodoList: React.FC<TodoListPropsI> = ({
+  todos,
+  setTodos,
+  listId,
+  deleteTodo,
+}) => {
   const [selectedTodos, setSelectedTodos] = useState<number[]>([]);
   const [search, setSearch] = useState<string>("");
   const [completedFilter, setCompletedFilter] = useState<CompletedFilterState>(
     "all"
   );
 
-  const handleDeleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const handleDeleteTodo = (id: number, listId: number) => {
+    deleteTodo(id, listId);
     setSelectedTodos(selectedTodos.filter((todoId) => todoId !== id));
   };
 
@@ -115,6 +121,7 @@ export const TodoList: React.FC<TodoListI> = ({ todos, setTodos, listId }) => {
             onSelect={selectTodo}
             onEdit={handleEditTodo}
             onDelete={handleDeleteTodo}
+            listId={listId}
           />
         ))}
       </ul>

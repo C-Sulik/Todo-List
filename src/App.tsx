@@ -1,7 +1,10 @@
 import React from "react";
+import { Dispatch } from "redux";
+import { connect } from "react-redux";
 import { TodoListContainer } from "./components/Todo";
-import { useState } from "react";
 import { TodoListI } from "./types";
+import { addList } from "./redux/actions";
+import { TodoListsStoreI } from "./redux/store";
 import {
   GlobalStyle,
   MainWrapper,
@@ -10,68 +13,31 @@ import {
   ListsWrapper,
 } from "./styled";
 
-const todosMock: TodoListI = {
-  id: 1,
-  title: "🐓 Todo List 🐓",
-  items: [
-    {
-      title: "Learn JS",
-      completed: true,
-      id: 1,
-    },
-    {
-      title: "Learn React",
-      completed: false,
-      id: 2,
-    },
-    {
-      title: "Learn Redux",
-      completed: false,
-      id: 3,
-    },
-  ],
-};
-
-export default function App() {
-  const [todoLists, setTodoLists] = useState<TodoListI[]>([todosMock]);
-
-  const addList = () => {
-    setTodoLists([
-      ...todoLists,
-      {
-        id: Date.now(),
-        title: "Todo List",
-        items: [],
-      },
-    ]);
-  };
-
-  const handleDeleteList = (listId: number) => {
-    setTodoLists(todoLists.filter(({ id }) => id !== listId));
-  };
-
-  const handleEditListTitle = (newName: string, id: number) => {
-    setTodoLists(
-      todoLists.map((list) =>
-        id === list.id ? { ...list, name: newName } : list
-      )
-    );
-  };
-
+const App: React.FC<{
+  todoLists: TodoListI[];
+  addList: (newList: TodoListI) => void;
+}> = ({ todoLists, addList }) => {
   return (
     <>
       <GlobalStyle />
       <MainWrapper>
         <StyledFooterWrapper color="pink">
-          <AddListButton type="button" onClick={addList}>
+          <AddListButton
+            type="button"
+            onClick={() =>
+              addList({
+                id: Date.now(),
+                title: "Todo List",
+                items: [],
+              })
+            }
+          >
             Add List
           </AddListButton>
         </StyledFooterWrapper>
         <ListsWrapper>
           {todoLists.map(({ id, title, items }) => (
             <TodoListContainer
-              onDelete={handleDeleteList}
-              onTitleEdit={handleEditListTitle}
               list={items}
               listTitle={title}
               listId={id}
@@ -82,4 +48,11 @@ export default function App() {
       </MainWrapper>
     </>
   );
-}
+};
+
+const mapStateToProps = (store: TodoListsStoreI) => ({ todoLists: store });
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addList: (newList: TodoListI) => dispatch(addList(newList)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

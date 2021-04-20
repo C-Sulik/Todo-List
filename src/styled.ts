@@ -43,3 +43,25 @@ export const ListsWrapper = styled.section`
   flex-wrap: wrap;
   align-items: flex-start;
 `;
+
+export const ListContainer = styled.div`
+  max-width: 353px;
+  margin: 20px;
+`;
+export const DeleteListBtn = styled(StyledButton)`
+  margin-left: 300px;
+  border: none;
+  width: 34px;
+`;
+export const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+export const EditTitleForm = styled.form`
+  display: flex;
+  align-items: center;
+  min-height: 34px;
+  width: 311px;
+  word-break: break-word;
+`;

@@ -6,8 +6,9 @@ import { TodoI } from "../../types";
 interface TodoItemPropsI {
   todo: TodoI;
   className: string;
+  listId: number;
   onEdit: (id: number, payload: Partial<TodoI>) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: number, listId: number) => void;
   onSelect: (id: number) => void;
 }
 
@@ -17,6 +18,7 @@ export const TodoItem: React.FC<TodoItemPropsI> = ({
   onDelete,
   onSelect,
   className,
+  listId,
 }) => {
   const toggleTodoCompleted = () => {
     onEdit(todo.id, { completed: !todo.completed });
@@ -31,7 +33,7 @@ export const TodoItem: React.FC<TodoItemPropsI> = ({
   };
 
   const handleDeleteTodo = () => {
-    onDelete(todo.id);
+    onDelete(todo.id, listId);
   };
 
   return (

@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
+import { Dispatch } from "redux";
+import { connect } from "react-redux";
+import { addTodo } from "../../redux/actions";
 
 interface AddTodoPropsI {
-  onAdd: (title: string) => void;
+  addTodo: (title: string) => void;
 }
-export const AddTodo: React.FC<AddTodoPropsI> = ({ onAdd }) => {
+const AddTodoComponent: React.FC<AddTodoPropsI> = ({ addTodo }) => {
   const [title, setTitle] = useState("");
 
   const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (title.trim()) onAdd(title);
+    if (title.trim()) addTodo(title);
     setTitle("");
   };
 
@@ -29,3 +32,9 @@ export const AddTodo: React.FC<AddTodoPropsI> = ({ onAdd }) => {
     </form>
   );
 };
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addTodo: (todoTitle: string) => dispatch(addTodo(todoTitle)),
+});
+
+export const AddTodo = connect(null, mapDispatchToProps)(AddTodoComponent);

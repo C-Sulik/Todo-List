@@ -7,7 +7,7 @@
 }
 
 .todo-list {
-  min-width: 353px;
+  max-width: 353px;
   margin: 20px;
 }
 
