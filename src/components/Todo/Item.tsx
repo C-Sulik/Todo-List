@@ -1,7 +1,7 @@
-import React from "react";
-import { Title } from "./Title";
-import styles from "./styles.module.css";
-import { TodoI } from "../../types";
+import React from 'react';
+import { Title } from './Title';
+import styles from './styles.module.css';
+import { TodoI } from '../../types';
 
 interface TodoItemPropsI {
   todo: TodoI;
@@ -24,9 +24,7 @@ export const TodoItem: React.FC<TodoItemPropsI> = ({
     onEdit(todo.id, { completed: !todo.completed });
   };
 
-  const handleSelectTodo = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
+  const handleSelectTodo = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (event.target === event.currentTarget) {
       onSelect(todo.id);
     }
@@ -39,17 +37,13 @@ export const TodoItem: React.FC<TodoItemPropsI> = ({
   return (
     <div className={className} onClick={handleSelectTodo}>
       <input
-        className={styles["todo-checkbox"]}
+        className={styles['todo-checkbox']}
         type="checkbox"
         onChange={toggleTodoCompleted}
         checked={todo.completed}
       />
       <Title todo={todo} onEdit={onEdit} />
-      <button
-        className={styles["del-btn"]}
-        type="button"
-        onClick={handleDeleteTodo}
-      >
+      <button className={styles['del-btn']} type="button" onClick={handleDeleteTodo}>
         X
       </button>
     </div>

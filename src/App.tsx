@@ -1,17 +1,17 @@
-import React from "react";
-import { Dispatch } from "redux";
-import { connect } from "react-redux";
-import { TodoListContainer } from "./components/Todo";
-import { TodoListI } from "./types";
-import { addList } from "./redux/actions";
-import { TodoListsStoreI } from "./redux/store";
+import React from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { TodoListContainer } from './components/Todo';
+import { TodoListI } from './types';
+import { addList } from './redux/actions';
+import { TodoListsStoreI } from './redux/store';
 import {
   GlobalStyle,
   MainWrapper,
   StyledFooterWrapper,
   AddListButton,
   ListsWrapper,
-} from "./styled";
+} from './styled';
 
 const App: React.FC<{
   todoLists: TodoListI[];
@@ -27,7 +27,7 @@ const App: React.FC<{
             onClick={() =>
               addList({
                 id: Date.now(),
-                title: "Todo List",
+                title: 'Todo List',
                 items: [],
               })
             }
@@ -37,12 +37,7 @@ const App: React.FC<{
         </StyledFooterWrapper>
         <ListsWrapper>
           {todoLists.map(({ id, title, items }) => (
-            <TodoListContainer
-              list={items}
-              listTitle={title}
-              listId={id}
-              key={id}
-            />
+            <TodoListContainer list={items} listTitle={title} listId={id} key={id} />
           ))}
         </ListsWrapper>
       </MainWrapper>

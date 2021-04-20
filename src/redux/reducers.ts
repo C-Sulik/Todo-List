@@ -1,20 +1,14 @@
-import { Reducer } from "redux";
-import { todosMock, TodoListsStoreI } from "./store";
-import { todoListsActions, TodoListsReducerAction } from "./constants";
-import { TodoListI } from "../types";
+import { Reducer } from 'redux';
+import { todosMock, TodoListsStoreI } from './store';
+import { todoListsActions, TodoListsReducerAction } from './constants';
+import { TodoListI } from '../types';
 
-const {
-  ADD_TODO_LIST,
-  DELETE_TODO_LIST,
-  EDIT_TODO_LIST,
-  ADD_TODO,
-  DELETE_TODO,
-} = todoListsActions;
+const { ADD_TODO_LIST, DELETE_TODO_LIST, EDIT_TODO_LIST, ADD_TODO, DELETE_TODO } = todoListsActions;
 
-export const todoListsReducer: Reducer<
-  TodoListsStoreI,
-  TodoListsReducerAction
-> = (todoLists = [todosMock], action) => {
+export const todoListsReducer: Reducer<TodoListsStoreI, TodoListsReducerAction> = (
+  todoLists = [todosMock],
+  action,
+) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -36,7 +30,7 @@ export const todoListsReducer: Reducer<
         return list.id === payload.id
           ? {
               ...list,
-              ...(data as { data: Omit<Partial<TodoListI>, "id"> }),
+              ...(data as { data: Omit<Partial<TodoListI>, 'id'> }),
             }
           : list;
       });
@@ -52,7 +46,7 @@ export const todoListsReducer: Reducer<
       });
 
     case DELETE_TODO:
-      console.log("DELETE_TODO");
+      console.log('DELETE_TODO');
       return todoLists.map((list) => {
         if (list.id === payload.listId) {
           return {

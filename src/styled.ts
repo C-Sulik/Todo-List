@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
  *{
@@ -27,8 +27,7 @@ export const StyledButton = styled.button`
   border: 1px solid gray;
   cursor: pointer;
   &:hover {
-    box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, 0.25),
-      -2px -2px 3px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, 0.25), -2px -2px 3px 0 rgba(255, 255, 255, 0.3);
   }
 `;
 

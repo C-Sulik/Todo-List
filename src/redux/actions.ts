@@ -1,5 +1,5 @@
-import { todoListsActions } from "./constants";
-import { TodoListI } from "../types";
+import { todoListsActions } from './constants';
+import { TodoListI } from '../types';
 
 export const deleteList = (id: number) => ({
   type: todoListsActions.DELETE_TODO_LIST,

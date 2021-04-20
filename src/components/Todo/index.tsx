@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Dispatch } from "redux";
-import { connect } from "react-redux";
-import { deleteList, editTitleName, deleteTodo } from "../../redux/actions";
-import { TodoList } from "./List";
-import { AddTodo } from "./AddTodo";
-import styles from "./styles.module.css";
-import { TodoI } from "../../types";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { deleteList, editTitleName, deleteTodo } from '../../redux/actions';
+import { TodoList } from './List';
+import { AddTodo } from './AddTodo';
+import styles from './styles.module.css';
+import { TodoI } from '../../types';
+import styled from 'styled-components';
 
 const Сockerel = styled.h2`
   display: inline-block;
@@ -58,59 +58,43 @@ const TodoListComponent: React.FC<TodoListContainerI> = ({
   // };
 
   return (
-    <div className={styles["todo-list"]}>
+    <div className={styles['todo-list']}>
       <button
-        className={styles["delete-list-btn"]}
+        className={styles['delete-list-btn']}
         type="button"
         onClick={() => deleteList(listId)}
       >
         X
       </button>
-      <div className={styles["list-title"]}>
+      <div className={styles['list-title']}>
         {!editListTitle && <Сockerel> {listTitle} </Сockerel>}
         {editListTitle && (
-          <form
-            className={styles["edit-title-form"]}
-            onSubmit={handleEditTitleName}
-          >
+          <form className={styles['edit-title-form']} onSubmit={handleEditTitleName}>
             <input
               type="text"
-              className={styles["title-input"]}
+              className={styles['title-input']}
               value={titleName}
               onChange={(event) => setTitleName(event.target.value)}
             />
-            <button type="submit" className={styles["edit-title-btn"]}>
+            <button type="submit" className={styles['edit-title-btn']}>
               S
             </button>
           </form>
         )}
-        <button
-          className={styles["edit-title-btn"]}
-          type="button"
-          onClick={showEditForm}
-        >
+        <button className={styles['edit-title-btn']} type="button" onClick={showEditForm}>
           🐓
         </button>
       </div>
       <AddTodo />
-      <TodoList
-        todos={list}
-        setTodos={setTodos}
-        listId={listId}
-        deleteTodo={deleteTodo}
-      />
+      <TodoList todos={list} setTodos={setTodos} listId={listId} deleteTodo={deleteTodo} />
     </div>
   );
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteList: (listId: number) => dispatch(deleteList(listId)),
-  editTitleName: (titleName: string, listId: number) =>
-    dispatch(editTitleName(titleName, listId)),
+  editTitleName: (titleName: string, listId: number) => dispatch(editTitleName(titleName, listId)),
   deleteTodo: (id: number, listId: number) => dispatch(deleteTodo(id, listId)),
 });
 
-export const TodoListContainer = connect(
-  null,
-  mapDispatchToProps
-)(TodoListComponent);
+export const TodoListContainer = connect(null, mapDispatchToProps)(TodoListComponent);
