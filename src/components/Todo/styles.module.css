@@ -7,7 +7,7 @@
 }
 
 .todo-list {
-  min-width: 353px;
+  max-width: 353px;
   margin: 20px;
 }
 
@@ -68,8 +68,7 @@
 }
 
 .todo:hover {
-  box-shadow: 6px 6px 8px 0 rgba(0, 0, 0, 0.25),
-    -4px -4px 12px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: 6px 6px 8px 0 rgba(0, 0, 0, 0.25), -4px -4px 12px 0 rgba(255, 255, 255, 0.3);
 }
 
 .del-btn {
