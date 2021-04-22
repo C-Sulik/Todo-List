@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { TodoListContainer } from './components/Todo';
 import { TodoListI } from './types';
 import { addList } from './redux/actions';
-import { TodoListsStoreI } from './redux/store';
+import { TodosStoreI } from './redux/store';
 import {
   GlobalStyle,
   MainWrapper,
@@ -45,7 +45,7 @@ const App: React.FC<{
   );
 };
 
-const mapStateToProps = (store: TodoListsStoreI) => ({ todoLists: store });
+const mapStateToProps = (store: TodosStoreI) => ({ todoLists: store.lists });
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   addList: (newList: TodoListI) => dispatch(addList(newList)),
 });

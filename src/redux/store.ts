@@ -1,5 +1,5 @@
-import { createStore } from 'redux';
-import { todoListsReducer } from './reducers';
+import { createStore, combineReducers } from 'redux';
+import { todosReducer } from './reducers';
 import { TodoListI } from '../types';
 
 export const todosMock: TodoListI = {
@@ -24,9 +24,9 @@ export const todosMock: TodoListI = {
   ],
 };
 
-export type TodoListsStoreI = TodoListI[];
-
+export type TodosStoreI = { lists: TodoListI[]; selectedTodos: Record<string, number[]> };
+// { [key: string]: number[] } === Record<string, number[]>
 export const store = createStore(
-  todoListsReducer,
+  todosReducer,
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__(),
 );
