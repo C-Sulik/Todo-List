@@ -1,37 +1,43 @@
 import React from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import { Title } from './Title';
 import styles from './styles.module.css';
 import { TodoI } from '../../types';
+import { toggleSelectTodo, unselectTodo } from '../../redux/actions';
 
 interface TodoItemPropsI {
   todo: TodoI;
   className: string;
   listId: number;
   onEdit: (id: number, payload: Partial<TodoI>) => void;
-  onDelete: (id: number, listId: number) => void;
-  onSelect: (id: number) => void;
+  deleteTodos: (listId: number, todosId: number[]) => void;
+  toggleSelectTodo: (listId: number, todoId: number) => void;
+  unselectTodo: (listId: number, todoId: number) => void;
 }
 
-export const TodoItem: React.FC<TodoItemPropsI> = ({
+export const TodoItemComponent: React.FC<TodoItemPropsI> = ({
+  listId,
   todo,
   onEdit,
-  onDelete,
-  onSelect,
+  deleteTodos,
+  toggleSelectTodo,
+  unselectTodo,
   className,
-  listId,
 }) => {
+  const handleDeleteTodo = () => {
+    deleteTodos(listId, [todo.id]);
+    // unselectTodo(listId, todo.id);
+  };
+
   const toggleTodoCompleted = () => {
     onEdit(todo.id, { completed: !todo.completed });
   };
 
   const handleSelectTodo = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (event.target === event.currentTarget) {
-      onSelect(todo.id);
+      toggleSelectTodo(listId, todo.id);
     }
-  };
-
-  const handleDeleteTodo = () => {
-    onDelete(todo.id, listId);
   };
 
   return (
@@ -49,3 +55,10 @@ export const TodoItem: React.FC<TodoItemPropsI> = ({
     </div>
   );
 };
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleSelectTodo: (listId: number, todoId: number) => dispatch(toggleSelectTodo(listId, todoId)),
+  unselectTodo: (listId: number, todoId: number) => dispatch(unselectTodo(listId, todoId)),
+});
+
+export const TodoItem = connect(null, mapDispatchToProps)(TodoItemComponent);

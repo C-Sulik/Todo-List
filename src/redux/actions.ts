@@ -6,8 +6,9 @@ export const todosActions = {
   EDIT_TITLE_NAME: 'EDIT_TITLE_NAME',
   EDIT_TODO_LIST: 'EDIT_TODO_LIST',
   ADD_TODO: 'ADD_TODO',
-  DELETE_TODO: 'DELETE_TODO',
-  SELECT_TODO: 'SELECT_TODO',
+  DELETE_TODOS: 'DELETE_TODO',
+  TOGGLE_SELECT_TODO: 'TOGGLE_SELECT_TODO',
+  UNSELECT_TODO: 'UNSELECT_TODO',
 } as const;
 
 export const deleteList = (id: number) => ({
@@ -25,18 +26,22 @@ export const editTitleName = (newListTitle: string, id: number) => ({
   payload: { id, title: newListTitle },
 });
 
-export const addTodo = (todoTitle: string) => ({
+export const addTodo = (listId: number, todoTitle: string) => ({
   type: todosActions.ADD_TODO,
-  payload: { title: todoTitle },
+  payload: { listId, title: todoTitle },
 });
 
-export const deleteTodo = (id: number, listId: number) => ({
-  type: todosActions.DELETE_TODO,
-  payload: { id, listId },
+export const deleteTodos = (listId: number, todosId: number[]) => ({
+  type: todosActions.DELETE_TODOS,
+  payload: { todosId, listId },
 });
-// handleCompletedTodos
 
-export const selectTodo = (id: number, listId: number) => ({
-  type: todosActions.SELECT_TODO,
-  payload: { id, listId },
+export const toggleSelectTodo = (listId: number, todoId: number) => ({
+  type: todosActions.TOGGLE_SELECT_TODO,
+  payload: { todoId, listId },
+});
+
+export const unselectTodo = (listId: number, todoId: number) => ({
+  type: todosActions.UNSELECT_TODO,
+  payload: { todoId, listId },
 });

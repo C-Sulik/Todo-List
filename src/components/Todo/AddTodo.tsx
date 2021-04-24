@@ -5,14 +5,15 @@ import { connect } from 'react-redux';
 import { addTodo } from '../../redux/actions';
 
 interface AddTodoPropsI {
-  addTodo: (title: string) => void;
+  addTodo: (listId: number, title: string) => void;
+  listId: number;
 }
-const AddTodoComponent: React.FC<AddTodoPropsI> = ({ addTodo }) => {
+const AddTodoComponent: React.FC<AddTodoPropsI> = ({ listId, addTodo }) => {
   const [title, setTitle] = useState('');
 
   const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (title.trim()) addTodo(title);
+    if (title.trim()) addTodo(listId, title);
     setTitle('');
   };
 
@@ -34,7 +35,7 @@ const AddTodoComponent: React.FC<AddTodoPropsI> = ({ addTodo }) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addTodo: (todoTitle: string) => dispatch(addTodo(todoTitle)),
+  addTodo: (listId: number, todoTitle: string) => dispatch(addTodo(listId, todoTitle)),
 });
 
 export const AddTodo = connect(null, mapDispatchToProps)(AddTodoComponent);
