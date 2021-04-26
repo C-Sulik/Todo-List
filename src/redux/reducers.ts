@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { todosMock, TodosStoreI } from './store';
 import { todosActions } from './actions';
-import { TodoListI } from '../types';
+import { TodoListI, TodoI } from '../types';
 
 const {
   ADD_TODO_LIST,
@@ -11,32 +11,32 @@ const {
   DELETE_TODOS,
   TOGGLE_SELECT_TODO,
   UNSELECT_TODOS,
-  COMPLETE_TODOS,
+  EDIT_TODOS,
 } = todosActions;
 
 type Action<T, P> = { readonly type: T; readonly payload: P };
 
 type AddTodoListAction = Action<typeof ADD_TODO_LIST, { list: TodoListI }>;
 type DeleteTodoListAction = Action<typeof DELETE_TODO_LIST, { id: number }>;
-type EditTodoListAction = Action<typeof EDIT_TODO_LIST, Partial<TodoListI>>;
+type EditTodosListAction = Action<typeof EDIT_TODO_LIST, Partial<TodoListI>>;
 type AddTodoAction = Action<typeof ADD_TODO, { listId: number; title: string }>;
 type DeleteTodosAction = Action<typeof DELETE_TODOS, { listId: number; todosId: number[] }>;
 type SelectTodoAction = Action<typeof TOGGLE_SELECT_TODO, { listId: number; todoId: number }>;
 type UnselectTodosAction = Action<typeof UNSELECT_TODOS, { listId: number; todosId: number[] }>;
-type completeSelectedTodosActions = Action<
-  typeof COMPLETE_TODOS,
-  { listId: number; todosId: number[] }
+type EditTodosAction = Action<
+  typeof EDIT_TODOS,
+  { listId: number; todosId: number[]; todoPayload: Partial<TodoI> }
 >;
 
 type TodosReducerActions =
   | AddTodoListAction
   | DeleteTodoListAction
-  | EditTodoListAction
+  | EditTodosListAction
   | AddTodoAction
   | DeleteTodosAction
   | SelectTodoAction
   | UnselectTodosAction
-  | completeSelectedTodosActions;
+  | EditTodosAction;
 
 export const todosReducer: Reducer<TodosStoreI, TodosReducerActions> = (
   todos = { lists: [todosMock], selectedTodos: {} }, // TodoListI[] => {todoList: TodoListI[], selectedTodos: {[key: number]: number[]}}
@@ -127,8 +127,8 @@ export const todosReducer: Reducer<TodosStoreI, TodosReducerActions> = (
       };
     }
 
-    case COMPLETE_TODOS: {
-      const { listId, todosId } = action.payload;
+    case EDIT_TODOS: {
+      const { listId, todosId, todoPayload } = action.payload;
       return {
         ...todos,
         lists: todos.lists.map((list) =>
@@ -139,7 +139,7 @@ export const todosReducer: Reducer<TodosStoreI, TodosReducerActions> = (
                   todosId.includes(item.id)
                     ? {
                         ...item,
-                        completed: true,
+                        ...todoPayload,
                       }
                     : item,
                 ),

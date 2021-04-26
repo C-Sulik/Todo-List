@@ -32,7 +32,6 @@ const TodoListComponent: React.FC<TodoListContainerI> = ({
   deleteList,
   editTitleName,
 }) => {
-  const [todos, setTodos] = useState(list);
   const [titleName, setTitleName] = useState(listTitle);
   const [editListTitle, setEditListTitle] = useState(false);
 
@@ -73,7 +72,7 @@ const TodoListComponent: React.FC<TodoListContainerI> = ({
         </button>
       </div>
       <AddTodo listId={listId} />
-      <TodoList todos={list} setTodos={setTodos} listId={listId} />
+      <TodoList todos={list} listId={listId} />
     </div>
   );
 };

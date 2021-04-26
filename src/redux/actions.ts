@@ -1,4 +1,4 @@
-import { TodoListI } from '../types';
+import { TodoI, TodoListI } from '../types';
 
 export const todosActions = {
   ADD_TODO_LIST: 'ADD_TODO_LIST',
@@ -6,10 +6,10 @@ export const todosActions = {
   EDIT_TITLE_NAME: 'EDIT_TITLE_NAME',
   EDIT_TODO_LIST: 'EDIT_TODO_LIST',
   ADD_TODO: 'ADD_TODO',
-  DELETE_TODOS: 'DELETE_TODO',
+  DELETE_TODOS: 'DELETE_TODOS',
   TOGGLE_SELECT_TODO: 'TOGGLE_SELECT_TODO',
   UNSELECT_TODOS: 'UNSELECT_TODO',
-  COMPLETE_TODOS: 'COMPLETE_TODOS',
+  EDIT_TODOS: 'EDIT_TODO',
 } as const;
 
 export const deleteList = (id: number) => ({
@@ -47,7 +47,7 @@ export const unselectTodos = (listId: number, todosId: number[]) => ({
   payload: { listId, todosId },
 });
 
-export const completeSelectedTodos = (listId: number, todosId: number[]) => ({
-  type: todosActions.COMPLETE_TODOS,
-  payload: { listId, todosId },
+export const editTodos = (listId: number, todosId: number[], todoPayload: Partial<TodoI>) => ({
+  type: todosActions.EDIT_TODOS,
+  payload: { listId, todosId, todoPayload },
 });

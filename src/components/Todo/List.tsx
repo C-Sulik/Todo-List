@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  deleteTodos,
-  toggleSelectTodo,
-  unselectTodos,
-  completeSelectedTodos,
-} from '../../redux/actions';
+import { deleteTodos, toggleSelectTodo, unselectTodos, editTodos } from '../../redux/actions';
 import { TodoItem } from './Item';
 import { Filter } from './Filter';
 import styles from './styles.module.css';
@@ -16,14 +11,14 @@ import { TodosStoreI } from '../../redux/store';
 interface TodoListOwnPropsI {
   todos: TodoI[];
   listId: number;
-  setTodos: (todos: TodoI[]) => void;
 }
 
 interface TodoListConnectedPropsI {
   selectedTodos: number[];
   deleteTodos: (listId: number, todosId: number[]) => void;
+  toggleSelectTodo: (listId: number, todoId: number) => void;
   unselectTodos: (listId: number, todosId: number[]) => void;
-  completeSelectedTodos: (listId: number, todosId: number[]) => void;
+  editTodos: (listId: number, todosId: number[], todoPayload: Partial<TodoI>) => void;
 }
 
 const completedFilterState = {
@@ -38,10 +33,10 @@ export const TodoListComponent: React.FC<TodoListOwnPropsI & TodoListConnectedPr
   todos,
   listId,
   selectedTodos,
-  setTodos,
   deleteTodos,
+  toggleSelectTodo,
   unselectTodos,
-  completeSelectedTodos,
+  editTodos,
 }) => {
   const [search, setSearch] = useState<string>('');
   const [completedFilter, setCompletedFilter] = useState<CompletedFilterState>(
@@ -54,7 +49,7 @@ export const TodoListComponent: React.FC<TodoListOwnPropsI & TodoListConnectedPr
   };
 
   const handleCompletedTodos = () => {
-    completeSelectedTodos(listId, selectedTodos);
+    editTodos(listId, selectedTodos, { completed: true });
     unselectTodos(listId, selectedTodos);
   };
 
@@ -63,10 +58,6 @@ export const TodoListComponent: React.FC<TodoListOwnPropsI & TodoListConnectedPr
     if (selectedTodos && selectedTodos.includes(id))
       className = `${styles.todo} ${styles['selected-todo']}`;
     return className;
-  };
-
-  const handleEditTodo = (id: number, payload: Partial<TodoI>) => {
-    setTodos(todos.map((todo) => (id === todo.id ? { ...todo, ...payload } : todo)));
   };
 
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,13 +100,14 @@ export const TodoListComponent: React.FC<TodoListOwnPropsI & TodoListConnectedPr
       <ul>
         {filterTodo(todos).map((todo) => (
           <TodoItem
+            key={todo.id}
+            listId={listId}
+            todo={todo}
             deleteTodos={deleteTodos}
             unselectTodos={unselectTodos}
-            key={todo.id}
-            todo={todo}
+            editTodos={editTodos}
+            toggleSelectTodo={toggleSelectTodo}
             className={selectTodoClassName(todo.id)}
-            onEdit={handleEditTodo}
-            listId={listId}
           />
         ))}
       </ul>
@@ -128,11 +120,11 @@ const mapStateToProps = (store: TodosStoreI, ownProps: TodoListOwnPropsI) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  completeSelectedTodos: (listId: number, todosId: number[]) =>
-    dispatch(completeSelectedTodos(listId, todosId)),
   deleteTodos: (listId: number, todosId: number[]) => dispatch(deleteTodos(listId, todosId)),
   toggleSelectTodo: (listId: number, todoId: number) => dispatch(toggleSelectTodo(listId, todoId)),
   unselectTodos: (listId: number, todosId: number[]) => dispatch(unselectTodos(listId, todosId)),
+  editTodos: (listId: number, todosId: number[], todoPayload: Partial<TodoI>) =>
+    dispatch(editTodos(listId, todosId, todoPayload)),
 });
 
 export const TodoList = connect(mapStateToProps, mapDispatchToProps)(TodoListComponent);

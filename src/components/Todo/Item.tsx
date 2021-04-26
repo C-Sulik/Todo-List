@@ -1,25 +1,22 @@
 import React from 'react';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
 import { Title } from './Title';
 import styles from './styles.module.css';
 import { TodoI } from '../../types';
-import { toggleSelectTodo } from '../../redux/actions';
 
 interface TodoItemPropsI {
   todo: TodoI;
-  className: string;
   listId: number;
-  onEdit: (id: number, payload: Partial<TodoI>) => void;
+  className: string;
+  editTodos: (listId: number, todosId: number[], todoPayload: Partial<TodoI>) => void;
   deleteTodos: (listId: number, todosId: number[]) => void;
   toggleSelectTodo: (listId: number, todoId: number) => void;
   unselectTodos: (listId: number, todoId: number[]) => void;
 }
 
-export const TodoItemComponent: React.FC<TodoItemPropsI> = ({
+export const TodoItem: React.FC<TodoItemPropsI> = ({
   listId,
   todo,
-  onEdit,
+  editTodos,
   deleteTodos,
   toggleSelectTodo,
   unselectTodos,
@@ -31,7 +28,7 @@ export const TodoItemComponent: React.FC<TodoItemPropsI> = ({
   };
 
   const toggleTodoCompleted = () => {
-    onEdit(todo.id, { completed: !todo.completed });
+    editTodos(listId, [todo.id], { completed: !todo.completed });
   };
 
   const handleSelectTodo = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -48,16 +45,10 @@ export const TodoItemComponent: React.FC<TodoItemPropsI> = ({
         onChange={toggleTodoCompleted}
         checked={todo.completed}
       />
-      <Title todo={todo} onEdit={onEdit} />
+      <Title todo={todo} listId={listId} editTodos={editTodos} />
       <button className={styles['del-btn']} type="button" onClick={handleDeleteTodo}>
         X
       </button>
     </div>
   );
 };
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  toggleSelectTodo: (listId: number, todoId: number) => dispatch(toggleSelectTodo(listId, todoId)),
-});
-
-export const TodoItem = connect(null, mapDispatchToProps)(TodoItemComponent);
