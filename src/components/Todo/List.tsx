@@ -1,56 +1,63 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { deleteTodos, toggleSelectTodo, unselectTodos, editTodos } from '../../redux/actions';
 import { TodoItem } from './Item';
 import { Filter } from './Filter';
 import styles from './styles.module.css';
 import { TodoI } from '../../types';
+import { TodosStoreI } from '../../redux/store';
 
-interface TodoListPropsI {
+interface TodoListOwnPropsI {
   todos: TodoI[];
-  setTodos: (todos: TodoI[]) => void;
   listId: number;
-  deleteTodo: (id: number, listId: number) => void;
 }
 
-export type CompletedFilterState = 'all' | 'completed' | 'not completed';
+interface TodoListConnectedPropsI {
+  selectedTodos: number[];
+  deleteTodos: (listId: number, todosId: number[]) => void;
+  toggleSelectTodo: (listId: number, todoId: number) => void;
+  unselectTodos: (listId: number, todosId: number[]) => void;
+  editTodos: (listId: number, todosId: number[], todoPayload: Partial<TodoI>) => void;
+}
 
-export const TodoList: React.FC<TodoListPropsI> = ({ todos, setTodos, listId, deleteTodo }) => {
-  const [selectedTodos, setSelectedTodos] = useState<number[]>([]);
+const completedFilterState = {
+  all: 'all',
+  completed: 'completed',
+  'not completed': 'not completed',
+} as const;
+
+export type CompletedFilterState = keyof typeof completedFilterState;
+
+export const TodoListComponent: React.FC<TodoListOwnPropsI & TodoListConnectedPropsI> = ({
+  todos,
+  listId,
+  selectedTodos,
+  deleteTodos,
+  toggleSelectTodo,
+  unselectTodos,
+  editTodos,
+}) => {
   const [search, setSearch] = useState<string>('');
-  const [completedFilter, setCompletedFilter] = useState<CompletedFilterState>('all');
-
-  const handleDeleteTodo = (id: number, listId: number) => {
-    deleteTodo(id, listId);
-    setSelectedTodos(selectedTodos.filter((todoId) => todoId !== id));
-  };
+  const [completedFilter, setCompletedFilter] = useState<CompletedFilterState>(
+    completedFilterState.all,
+  );
 
   const handleDeleteTodos = () => {
-    setTodos(todos.filter((todo) => !selectedTodos.includes(todo.id)));
-    setSelectedTodos([]);
+    deleteTodos(listId, selectedTodos);
+    unselectTodos(listId, selectedTodos);
   };
 
   const handleCompletedTodos = () => {
-    setTodos(
-      todos.map((todo) => (selectedTodos.includes(todo.id) ? { ...todo, completed: true } : todo)),
-    );
-    setSelectedTodos([]);
-  };
-
-  const selectTodo = (id: number) => {
-    if (selectedTodos.includes(id)) {
-      setSelectedTodos(selectedTodos.filter((elem) => elem !== id));
-    } else {
-      setSelectedTodos([...selectedTodos, id]);
-    }
+    editTodos(listId, selectedTodos, { completed: true });
+    unselectTodos(listId, selectedTodos);
   };
 
   const selectTodoClassName = (id: number): string => {
     let className = `${styles.todo}`;
-    if (selectedTodos.includes(id)) className = `${styles.todo} ${styles['selected-todo']}`;
+    if (selectedTodos && selectedTodos.includes(id))
+      className = `${styles.todo} ${styles['selected-todo']}`;
     return className;
-  };
-
-  const handleEditTodo = (id: number, payload: Partial<TodoI>) => {
-    setTodos(todos.map((todo) => (id === todo.id ? { ...todo, ...payload } : todo)));
   };
 
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,9 +68,9 @@ export const TodoList: React.FC<TodoListPropsI> = ({ todos, setTodos, listId, de
     switch (true) {
       case Boolean(search):
         return todos.filter(({ title }) => title.toLowerCase().includes(search));
-      case completedFilter === 'not completed':
+      case completedFilter === completedFilterState['not completed']:
         return todos.filter(({ completed }) => !completed);
-      case completedFilter === 'completed':
+      case completedFilter === completedFilterState.completed:
         return todos.filter(({ completed }) => completed);
       default:
         return todos;
@@ -74,7 +81,7 @@ export const TodoList: React.FC<TodoListPropsI> = ({ todos, setTodos, listId, de
     <div className={styles.wrapper}>
       <Filter listId={listId} setCompletedFilter={setCompletedFilter} />
       <div>
-        {selectedTodos.length > 0 && (
+        {selectedTodos && selectedTodos.length > 0 && (
           <button
             className={styles['completed-todos-btn']}
             type="button"
@@ -84,7 +91,7 @@ export const TodoList: React.FC<TodoListPropsI> = ({ todos, setTodos, listId, de
           </button>
         )}
         <input type="search" onChange={onSearch} className={styles['search-todo']} />
-        {selectedTodos.length > 0 && (
+        {selectedTodos && selectedTodos.length > 0 && (
           <button className={styles['delete-todos-btn']} type="button" onClick={handleDeleteTodos}>
             {`Delete ${selectedTodos.length}`}
           </button>
@@ -94,15 +101,30 @@ export const TodoList: React.FC<TodoListPropsI> = ({ todos, setTodos, listId, de
         {filterTodo(todos).map((todo) => (
           <TodoItem
             key={todo.id}
-            todo={todo}
-            className={selectTodoClassName(todo.id)}
-            onSelect={selectTodo}
-            onEdit={handleEditTodo}
-            onDelete={handleDeleteTodo}
             listId={listId}
+            todo={todo}
+            deleteTodos={deleteTodos}
+            unselectTodos={unselectTodos}
+            editTodos={editTodos}
+            toggleSelectTodo={toggleSelectTodo}
+            className={selectTodoClassName(todo.id)}
           />
         ))}
       </ul>
     </div>
   );
 };
+
+const mapStateToProps = (store: TodosStoreI, ownProps: TodoListOwnPropsI) => ({
+  selectedTodos: store.selectedTodos[ownProps.listId] || [],
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  deleteTodos: (listId: number, todosId: number[]) => dispatch(deleteTodos(listId, todosId)),
+  toggleSelectTodo: (listId: number, todoId: number) => dispatch(toggleSelectTodo(listId, todoId)),
+  unselectTodos: (listId: number, todosId: number[]) => dispatch(unselectTodos(listId, todosId)),
+  editTodos: (listId: number, todosId: number[], todoPayload: Partial<TodoI>) =>
+    dispatch(editTodos(listId, todosId, todoPayload)),
+});
+
+export const TodoList = connect(mapStateToProps, mapDispatchToProps)(TodoListComponent);

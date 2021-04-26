@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { deleteList, editTitleName, deleteTodo } from '../../redux/actions';
+import { deleteList, editTitleName } from '../../redux/actions';
 import { TodoList } from './List';
 import { AddTodo } from './AddTodo';
 import styles from './styles.module.css';
@@ -21,7 +21,6 @@ interface TodoListContainerI {
   list: TodoI[];
   listTitle: string;
   listId: number;
-  deleteTodo: (id: number, listId: number) => void;
   deleteList: (id: number) => void;
   editTitleName: (titleName: string, listId: number) => void;
 }
@@ -31,10 +30,8 @@ const TodoListComponent: React.FC<TodoListContainerI> = ({
   listTitle,
   listId,
   deleteList,
-  deleteTodo,
   editTitleName,
 }) => {
-  const [todos, setTodos] = useState(list);
   const [titleName, setTitleName] = useState(listTitle);
   const [editListTitle, setEditListTitle] = useState(false);
 
@@ -45,17 +42,6 @@ const TodoListComponent: React.FC<TodoListContainerI> = ({
     editTitleName(titleName, listId);
     setEditListTitle(false);
   };
-
-  // const handleAddToDo = (title: string) => {
-  //   setTodos([
-  //     {
-  //       title,
-  //       completed: false,
-  //       id: Date.now(),
-  //     },
-  //     ...todos,
-  //   ]);
-  // };
 
   return (
     <div className={styles['todo-list']}>
@@ -85,8 +71,8 @@ const TodoListComponent: React.FC<TodoListContainerI> = ({
           🐓
         </button>
       </div>
-      <AddTodo />
-      <TodoList todos={list} setTodos={setTodos} listId={listId} deleteTodo={deleteTodo} />
+      <AddTodo listId={listId} />
+      <TodoList todos={list} listId={listId} />
     </div>
   );
 };
@@ -94,7 +80,6 @@ const TodoListComponent: React.FC<TodoListContainerI> = ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteList: (listId: number) => dispatch(deleteList(listId)),
   editTitleName: (titleName: string, listId: number) => dispatch(editTitleName(titleName, listId)),
-  deleteTodo: (id: number, listId: number) => dispatch(deleteTodo(id, listId)),
 });
 
 export const TodoListContainer = connect(null, mapDispatchToProps)(TodoListComponent);
