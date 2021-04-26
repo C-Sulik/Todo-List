@@ -11,6 +11,7 @@ const {
   DELETE_TODOS,
   TOGGLE_SELECT_TODO,
   UNSELECT_TODOS,
+  COMPLETE_TODOS,
 } = todosActions;
 
 type Action<T, P> = { readonly type: T; readonly payload: P };
@@ -22,6 +23,10 @@ type AddTodoAction = Action<typeof ADD_TODO, { listId: number; title: string }>;
 type DeleteTodosAction = Action<typeof DELETE_TODOS, { listId: number; todosId: number[] }>;
 type SelectTodoAction = Action<typeof TOGGLE_SELECT_TODO, { listId: number; todoId: number }>;
 type UnselectTodosAction = Action<typeof UNSELECT_TODOS, { listId: number; todosId: number[] }>;
+type completeSelectedTodosActions = Action<
+  typeof COMPLETE_TODOS,
+  { listId: number; todosId: number[] }
+>;
 
 type TodosReducerActions =
   | AddTodoListAction
@@ -30,7 +35,8 @@ type TodosReducerActions =
   | AddTodoAction
   | DeleteTodosAction
   | SelectTodoAction
-  | UnselectTodosAction;
+  | UnselectTodosAction
+  | completeSelectedTodosActions;
 
 export const todosReducer: Reducer<TodosStoreI, TodosReducerActions> = (
   todos = { lists: [todosMock], selectedTodos: {} }, // TodoListI[] => {todoList: TodoListI[], selectedTodos: {[key: number]: number[]}}
@@ -118,6 +124,28 @@ export const todosReducer: Reducer<TodosStoreI, TodosReducerActions> = (
           ...todos.selectedTodos,
           [listId]: todos.selectedTodos[listId].filter((id) => !todosId.includes(id)),
         },
+      };
+    }
+
+    case COMPLETE_TODOS: {
+      const { listId, todosId } = action.payload;
+      return {
+        ...todos,
+        lists: todos.lists.map((list) =>
+          list.id === listId
+            ? {
+                ...list,
+                items: list.items.map((item) =>
+                  todosId.includes(item.id)
+                    ? {
+                        ...item,
+                        completed: true,
+                      }
+                    : item,
+                ),
+              }
+            : list,
+        ),
       };
     }
 
