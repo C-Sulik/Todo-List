@@ -10,7 +10,7 @@ const {
   ADD_TODO,
   DELETE_TODOS,
   TOGGLE_SELECT_TODO,
-  UNSELECT_TODO,
+  UNSELECT_TODOS,
 } = todosActions;
 
 type Action<T, P> = { readonly type: T; readonly payload: P };
@@ -21,7 +21,7 @@ type EditTodoListAction = Action<typeof EDIT_TODO_LIST, Partial<TodoListI>>;
 type AddTodoAction = Action<typeof ADD_TODO, { listId: number; title: string }>;
 type DeleteTodosAction = Action<typeof DELETE_TODOS, { listId: number; todosId: number[] }>;
 type SelectTodoAction = Action<typeof TOGGLE_SELECT_TODO, { listId: number; todoId: number }>;
-type UnselectTodoAction = Action<typeof UNSELECT_TODO, { listId: number; todoId: number }>;
+type UnselectTodosAction = Action<typeof UNSELECT_TODOS, { listId: number; todosId: number[] }>;
 
 type TodosReducerActions =
   | AddTodoListAction
@@ -30,7 +30,7 @@ type TodosReducerActions =
   | AddTodoAction
   | DeleteTodosAction
   | SelectTodoAction
-  | UnselectTodoAction;
+  | UnselectTodosAction;
 
 export const todosReducer: Reducer<TodosStoreI, TodosReducerActions> = (
   todos = { lists: [todosMock], selectedTodos: {} }, // TodoListI[] => {todoList: TodoListI[], selectedTodos: {[key: number]: number[]}}
@@ -109,14 +109,14 @@ export const todosReducer: Reducer<TodosStoreI, TodosReducerActions> = (
       };
     }
 
-    case UNSELECT_TODO: {
-      const { listId, todoId } = action.payload;
+    case UNSELECT_TODOS: {
+      const { listId, todosId } = action.payload;
 
       return {
         ...todos,
         selectedTodos: {
           ...todos.selectedTodos,
-          [listId]: todos.selectedTodos[listId].filter((id) => id !== todoId),
+          [listId]: todos.selectedTodos[listId].filter((id) => !todosId.includes(id)),
         },
       };
     }

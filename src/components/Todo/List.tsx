@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { deleteTodos, toggleSelectTodo, unselectTodo } from '../../redux/actions';
+import { deleteTodos, toggleSelectTodo, unselectTodos } from '../../redux/actions';
 import { TodoItem } from './Item';
 import { Filter } from './Filter';
 import styles from './styles.module.css';
 import { TodoI } from '../../types';
 import { TodosStoreI } from '../../redux/store';
 
-interface TodoListPropsI {
+interface TodoListOwnPropsI {
   todos: TodoI[];
   listId: number;
-  storeSelectedTodos: Record<string, number[]>;
-  deleteTodos: (listId: number, todosId: number[]) => void;
   setTodos: (todos: TodoI[]) => void;
+}
+
+interface TodoListConnectedPropsI {
+  storeSelectedTodos: number[];
+  deleteTodos: (listId: number, todosId: number[]) => void;
+  unselectTodos: (listId: number, todosId: number[]) => void;
 }
 
 const completedFilterState = {
@@ -24,22 +28,23 @@ const completedFilterState = {
 
 export type CompletedFilterState = keyof typeof completedFilterState;
 
-export const TodoListComponent: React.FC<TodoListPropsI> = ({
+export const TodoListComponent: React.FC<TodoListOwnPropsI & TodoListConnectedPropsI> = ({
   todos,
-  setTodos,
   listId,
-  deleteTodos,
   storeSelectedTodos,
+  setTodos,
+  deleteTodos,
+  unselectTodos,
 }) => {
-  const [selectedTodos, setSelectedTodos] = useState<number[]>(storeSelectedTodos[listId] || []);
+  const [selectedTodos, setSelectedTodos] = useState<number[]>(storeSelectedTodos);
   const [search, setSearch] = useState<string>('');
   const [completedFilter, setCompletedFilter] = useState<CompletedFilterState>(
     completedFilterState.all,
   );
 
   const handleDeleteTodos = () => {
-    setTodos(todos.filter((todo) => !selectedTodos.includes(todo.id)));
-    setSelectedTodos([]);
+    deleteTodos(listId, storeSelectedTodos);
+    unselectTodos(listId, storeSelectedTodos);
   };
 
   const handleCompletedTodos = () => {
@@ -51,7 +56,8 @@ export const TodoListComponent: React.FC<TodoListPropsI> = ({
 
   const selectTodoClassName = (id: number): string => {
     let className = `${styles.todo}`;
-    if (selectedTodos.includes(id)) className = `${styles.todo} ${styles['selected-todo']}`;
+    if (storeSelectedTodos && storeSelectedTodos.includes(id))
+      className = `${styles.todo} ${styles['selected-todo']}`;
     return className;
   };
 
@@ -80,19 +86,19 @@ export const TodoListComponent: React.FC<TodoListPropsI> = ({
     <div className={styles.wrapper}>
       <Filter listId={listId} setCompletedFilter={setCompletedFilter} />
       <div>
-        {selectedTodos.length > 0 && (
+        {storeSelectedTodos && storeSelectedTodos.length > 0 && (
           <button
             className={styles['completed-todos-btn']}
             type="button"
             onClick={handleCompletedTodos}
           >
-            {`Complete ${selectedTodos.length}`}
+            {`Complete ${storeSelectedTodos.length}`}
           </button>
         )}
         <input type="search" onChange={onSearch} className={styles['search-todo']} />
-        {selectedTodos.length > 0 && (
+        {storeSelectedTodos && storeSelectedTodos.length > 0 && (
           <button className={styles['delete-todos-btn']} type="button" onClick={handleDeleteTodos}>
-            {`Delete ${selectedTodos.length}`}
+            {`Delete ${storeSelectedTodos.length}`}
           </button>
         )}
       </div>
@@ -100,6 +106,7 @@ export const TodoListComponent: React.FC<TodoListPropsI> = ({
         {filterTodo(todos).map((todo) => (
           <TodoItem
             deleteTodos={deleteTodos}
+            unselectTodos={unselectTodos}
             key={todo.id}
             todo={todo}
             className={selectTodoClassName(todo.id)}
@@ -112,14 +119,14 @@ export const TodoListComponent: React.FC<TodoListPropsI> = ({
   );
 };
 
-const mapStateToProps = (store: TodosStoreI) => ({
-  storeSelectedTodos: store.selectedTodos,
+const mapStateToProps = (store: TodosStoreI, ownProps: TodoListOwnPropsI) => ({
+  storeSelectedTodos: store.selectedTodos[ownProps.listId] || [],
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteTodos: (listId: number, todosId: number[]) => dispatch(deleteTodos(listId, todosId)),
   toggleSelectTodo: (listId: number, todoId: number) => dispatch(toggleSelectTodo(listId, todoId)),
-  unselectTodo: (listId: number, todoId: number) => dispatch(unselectTodo(listId, todoId)),
+  unselectTodos: (listId: number, todosId: number[]) => dispatch(unselectTodos(listId, todosId)),
 });
 
 export const TodoList = connect(mapStateToProps, mapDispatchToProps)(TodoListComponent);

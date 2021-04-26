@@ -8,7 +8,7 @@ export const todosActions = {
   ADD_TODO: 'ADD_TODO',
   DELETE_TODOS: 'DELETE_TODO',
   TOGGLE_SELECT_TODO: 'TOGGLE_SELECT_TODO',
-  UNSELECT_TODO: 'UNSELECT_TODO',
+  UNSELECT_TODOS: 'UNSELECT_TODO',
 } as const;
 
 export const deleteList = (id: number) => ({
@@ -41,7 +41,7 @@ export const toggleSelectTodo = (listId: number, todoId: number) => ({
   payload: { todoId, listId },
 });
 
-export const unselectTodo = (listId: number, todoId: number) => ({
-  type: todosActions.UNSELECT_TODO,
-  payload: { todoId, listId },
+export const unselectTodos = (listId: number, todosId: number[]) => ({
+  type: todosActions.UNSELECT_TODOS,
+  payload: { listId, todosId },
 });
